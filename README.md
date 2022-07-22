@@ -11,7 +11,7 @@ A "solved" or goal state of an 8-puzzle is achieved when each number goes in a s
 7 &nbsp; 8 &nbsp; 0
 
 A move is defined as swapping the empty tile (0) with any cardinally adjacent tile.
-The Uniform Cost algorithm assigns the cost of every move to 1. 
+The Uniform Cost search algorithm assigns the cost of every move to 1. 
 The A* search algorithms utilize misplaced tile and manhattan distance heuristics to calculate the cost of a move.
 All algorithms can solve 8-puzzles optimally but perform with varying efficiency.
 
@@ -30,9 +30,9 @@ If depth >= 24, A* search w/ the misplaced tile heuristic won't be performed.
 These limitations are in place because otherwise, the algorithms won't run to completion in a reasonable time.
 
 ## Project Structure
-- `algorithms.cpp/h` in `src/` contains the Uniform Cost and A* algorithms
+- `algorithms.cpp/h` in `src/` contains the Uniform Cost and A* search algorithms
 - `node.cpp/h` in `src/` contains the node class including sample puzzles and functions for operators and heuristics
-- `main.cpp/h` in `src/` runs the 3 algorithms in the console
+- `main.cpp/h` in `src/` runs all the algorithms on a user-specified puzzle
 
 # PROJECT REPORT
 ## Introduction
@@ -112,7 +112,7 @@ This the most efficient of the 3 algorithms.
 ## Analyzing Performance on Sample Puzzles
 These are all the sample puzzles given and their corresponding optimal depths.
 
-<img src="images/Sample Puzzles.png" alt="drawing" width="600"/>
+<img src="images/Sample Puzzles.png" alt="drawing" width="800"/>
 
 The first puzzle with depth 0 is the goal state and used for testing purposes.
 With the rest of the puzzles, we can observe that the algorithms perform similarly when the search depth is low.
@@ -121,10 +121,10 @@ However, when the depth increases, the efficiency of the algorithms become drast
 The uniform cost and A* with misplaced tile heuristic searches don’t reach to the end of the solution depth axis because they were unable to solve those puzzles in a reasonable time (15 mins).
 As we can clearly see, those searches would have grown their nodes expanded value exponentially, making it infeasible to solve puzzles larger than listed.
 
-<img src="images/Nodes Expanded vs Solution Depth.png" alt="drawing" width="600"/>
+<img src="images/Nodes Expanded vs Solution Depth.png" alt="drawing" width="800"/>
 
 ## Visual Studio Diagnostic Tools Data
-_Note: Columns marked as "N/A" means that the algorithm was not able to finish within 15 minutes for that puzzle_
+_Note: Columns marked as "N/A" denotes that the algorithm was not able to finish within 15 minutes for that puzzle_
 
 ### Uniform Cost Search
 |  **Puzzle Depth**  |   0   |   2   |  4  |  8  |  12   | 16  | 20  | 24  |
@@ -159,7 +159,7 @@ It’s clear why uniform cost search is unable to perform at higher depths and w
 The time complexity can range to near exponential if the heuristic is not efficient, further supporting the importance of an efficient heuristic especially at asymptotic depth values.
 
 ### Trace of Uniform Cost Search (Puzzle 2)
-<img src="images/Uniform Cost Search Trace.jpg" alt="drawing" width="600"/>
+<img src="images/Uniform Cost Search Trace.jpg" alt="drawing" width="800"/>
 
 Each line between tree levels with 1 dash denotes a repeated node.
 A line with 2 dashes denotes an illegal move.
@@ -170,7 +170,7 @@ There isn’t much in terms of optimization here.
 
 
 ### Trace of A* Search w/ Misplaced Tile Heuristic (Puzzle 2)
-<img src="images/A-Star Search Trace.jpg" alt="drawing" width="600"/>
+<img src="images/A-Star Search Trace.jpg" alt="drawing" width="800"/>
 
 Each line between tree levels with 1 dash denotes a repeated node.
 A line with 2 dashes denotes an illegal move.
