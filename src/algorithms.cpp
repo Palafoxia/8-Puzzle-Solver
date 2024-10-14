@@ -4,8 +4,8 @@
 #include <iostream>
 #include <algorithm>
 
-// Global Variables
-vector<vector<vector<int>>> visitedPuzzles; // Vector of visited puzzles
+// Vector of visited puzzles
+vector<vector<vector<int>>> visitedPuzzles;
 
 // UNIFORM COST SEARCH (BREADTH-FIRST SEARCH)
 void uniformCostSearch(vector<vector<int>> puzzle) {
@@ -86,19 +86,18 @@ void AStarSearch(vector<vector<int>> puzzle, string heuristic) { // Manhattan or
 	}
 }
 
-// Setup Search
+// SETUP SEARCH
 queue<node> setupSearch(vector<vector<int>> puzzle) {
-	// Reset global variables
+	// Reset visited puzzles
     visitedPuzzles.clear();
 
 	// Make queue and create root with initial state
-	node initialState = node(puzzle, -1);
+	node initialState = node(puzzle);
 	queue<node> tree;
 
-	// Goal State is Initial State
+	// Check if initial sate is already goal state
 	if (initialState.isGoalState()) {
-		cout << "Solution found at depth " << initialState.getDepth() << endl;
-		cout << "Total expanded nodes: " << visitedPuzzles.size() << endl;
+		cout << "Initial state is already goal state" << endl;
 		return tree;
 	}
 	tree.push(initialState);
@@ -125,7 +124,7 @@ bool move(node currentNode, vector<vector<int>> move, queue<node>& tree) {
 
 // Check if puzzle has been visited
 bool isVisitedPuzzle(vector<vector<vector<int>>> visitedPuzzles, vector<vector<int>> puzzle) {
-	for (int i = 0; i < visitedPuzzles.size(); i++) {
+	for (int i = 0; i < int(visitedPuzzles.size()); i++) {
 		if (puzzle == visitedPuzzles[i]) {
 			return true;
 		}

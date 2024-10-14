@@ -1,84 +1,42 @@
 #include "node.h"
-
 #include <iostream>
 
-// TEST CASES
-// Depth 0 (Reference)
+// GOAL STATE
 vector<vector<int>> node::solved = {
 	{1, 2, 3},
 	{4, 5, 6},
 	{7, 8, 0}
 };
 
-// Depth 2
-vector<vector<int>> node::puzzle2 {
-	{1, 2, 3},
-	{4, 5, 6},
-	{0, 7, 8}
-};
-
-// Depth 4
-vector<vector<int>> node::puzzle4 {
-	{1, 2, 3},
-	{5, 0, 6},
-	{4, 7, 8}
-};
-
-// Depth 8
-vector<vector<int>> node::puzzle8 {
-	{1, 3, 6},
-	{5, 0, 2},
-	{4, 7, 8}
-};
-
-// Depth 12
-vector<vector<int>> node::puzzle12 {
-	{1, 3, 6},
-	{5, 0, 7},
-	{4, 8, 2}
-};
-
-// Depth 16
-vector<vector<int>> node::puzzle16 {
-	{1, 6, 7},
-	{5, 0, 3},
-	{4, 8, 2}
-};
-
-// Depth 20
-vector<vector<int>> node::puzzle20 {
-	{7, 1, 2},
-	{4, 8, 5},
-	{6, 3, 0}
-};
-
-// Depth 24
-vector<vector<int>> node::puzzle24 {
-	{0, 7, 2},
-	{4, 6, 1},
-	{3, 5, 8}
-};
-
-// "Empty" Puzzle (will not expand)
+// EMPTY PUZZLE
 vector<vector<int>> node::emptyPuzzle = {
 	{0, 0, 0},
 	{0, 0, 0},
 	{0, 0, 0}
 };
 
-// Default Constructor, "Solved"
+// DEFAULT CONSTRUCTOR (GOAL STATE)
 node::node() {
 	this->puzzle = solved;
     this->depth = 0;
 	this->setRowCol();
 }
 
-// Constructor
+// CONSTRUCTOR
 node::node(vector<vector<int>> puzzle, int depth) {
     this->puzzle = puzzle;
     this->depth = depth + 1;
-    this->misplaced = depth + this->misplacedHeuristic();
-    this->fn = depth + this->manhattanDistance();
+    this->misplaced = this->depth + this->misplacedHeuristic();
+    this->fn = this->depth + this->manhattanDistance();
+	this->setRowCol();
+}
+
+// ROOT NODE CONSTRUCTOR (DEPTH = 0)
+node::node(vector<vector<int>> puzzle) {
+	this->puzzle = puzzle;
+    this->depth = 0;
+    this->misplaced = this->depth + this->misplacedHeuristic();
+    this->fn = this->depth + this->manhattanDistance();
 	this->setRowCol();
 }
 
@@ -86,11 +44,10 @@ node::node(vector<vector<int>> puzzle, int depth) {
 int node::misplacedHeuristic() {
     int numMisplaced = 0;
 
-    // For each tile in puzzle
+    // Increment numMisplaced for each misplaced tile in puzzle
     for(int i = 0; i < 3; i++) {
    		for (int j = 0; j < 3; j++) {
-		    // Add 1 if tile in puzzle != to solved reference
-		    if (puzzle[i][j] != node().puzzle[i][j]) {
+		    if (puzzle[i][j] != node::solved[i][j]) {
 			    numMisplaced++;
    			}
 	    }
@@ -98,7 +55,7 @@ int node::misplacedHeuristic() {
     return numMisplaced;
 }
 
-//MANHATTAN DISTANCE HEURISTIC
+// MANHATTAN DISTANCE HEURISTIC
 int node::manhattanDistance() {
   	int distance = 0;
 
@@ -110,7 +67,7 @@ int node::manhattanDistance() {
     			for (int k = 0; k < 3; k++) {
    					for (int l = 0; l < 3; l++) {
 					    //Once found, add distance to total
-					    if (puzzle[i][j] == node().puzzle[k][l])
+					    if (puzzle[i][j] == solved[k][l])
    							distance += abs(i - k) + abs(j - l); //Distance horizontally + vertically
     				}
 	    		}
@@ -120,37 +77,7 @@ int node::manhattanDistance() {
     return distance;
 }
 
-// Print Puzzle
-void node::printPuzzle() {
-	for (int i = 0; i < puzzle.size(); i++) {
-		cout << "| ";
-		for (int j = 0; j < puzzle[i].size(); j++) {
-			cout << puzzle[i][j] << " ";
-		}
-		cout << "|" << endl;
-	}
-	cout << endl;
-}
-
-// Check if puzzle is the goal state
-bool node::isGoalState() {
-	if (puzzle == solved) {
-    	return true;
-	} else {
-	    return false;
-	}
-}
-
-// Check if puzzle is empty puzzle
-bool node::isEmptyPuzzle() {
-	if (puzzle == emptyPuzzle) {
-		return true;
-	} else {
-		return false;
-	}
-}
-
-// Find the position (row, col) of 0 in the puzzle
+// FIND ROW & COL OF EMPTY TILE (0)
 void node::setRowCol() {
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
@@ -162,8 +89,26 @@ void node::setRowCol() {
 	}
 }
 
-// OPERATORS
-// Blank space (0) up
+// CHECK IF GOAL STATE
+bool node::isGoalState() {
+	if (puzzle == solved) {
+    	return true;
+	} else {
+	    return false;
+	}
+}
+
+// CHECK IF EMPTY PUZZLE
+bool node::isEmptyPuzzle() {
+	if (puzzle == emptyPuzzle) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+// OPERATORS (MOVE EMPTY TILE)
+// UP
 vector<vector<int>> node::up() {
 	vector<vector<int>> newPuzzle = puzzle;
 	if (row > 0) {
@@ -175,10 +120,10 @@ vector<vector<int>> node::up() {
 	return newPuzzle;
 }
 
-// Blank space (0) down
+// DOWN
 vector<vector<int>> node::down() {
 	vector<vector<int>> newPuzzle = puzzle;
-	if (row < newPuzzle.size() - 1) {
+	if (row < int(newPuzzle.size()) - 1) {
 		newPuzzle[row][col] = newPuzzle[row + 1][col];
 		newPuzzle[row + 1][col] = 0;
 	} else {
@@ -187,7 +132,7 @@ vector<vector<int>> node::down() {
 	return newPuzzle;
 }
 
-// Blank space (0) left
+// LEFT
 vector<vector<int>> node::left() {
 	vector<vector<int>> newPuzzle = puzzle;
 	if (col > 0) {
@@ -199,10 +144,10 @@ vector<vector<int>> node::left() {
 	return newPuzzle;
 }
 
-// Blank space (0) right
+// RIGHT
 vector<vector<int>> node::right() {
 	vector<vector<int>> newPuzzle = puzzle;
-	if (col < newPuzzle[0].size() - 1) {
+	if (col < int(newPuzzle[0].size()) - 1) {
 		newPuzzle[row][col] = newPuzzle[row][col + 1];
 		newPuzzle[row][col + 1] = 0;
 	} else {
@@ -211,7 +156,7 @@ vector<vector<int>> node::right() {
 	return newPuzzle;
 }
 
-// Accessors
+// ACCESSORS
 vector<vector<int>> node::getPuzzle() {return puzzle;}
 int node::getDepth() {return depth;}
 int node::getMisplaced() {return misplaced;}

@@ -32,7 +32,7 @@ These limitations are in place because otherwise, the algorithms won't run to co
 ## Project Structure
 - `algorithms.cpp/h` in `src/` contains the Uniform Cost and A* search algorithms
 - `node.cpp/h` in `src/` contains the node class including sample puzzles and functions for operators and heuristics
-- `main.cpp/h` in `src/` runs all the algorithms on a user-specified puzzle
+- `main.cpp` in `src/` runs all the algorithms on a user-specified puzzle
 
 # PROJECT REPORT
 ## Introduction
