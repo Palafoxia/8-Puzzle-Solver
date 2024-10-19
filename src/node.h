@@ -1,5 +1,8 @@
 #pragma once
+
 #include <vector>
+#include <unordered_map>
+
 using namespace std;
 
 // NODE CLASS
@@ -12,8 +15,8 @@ class node {
         // GOAL STATE 8-PUZZLE
         static vector<vector<int>> solved;
 
-        // Empty Puzzle (All 0's)
-        static vector<vector<int>> emptyPuzzle; // "Empty Puzzle" (all 0's)
+        // EMPTY PUZZLE (All 0's)
+        static vector<vector<int>> emptyPuzzle;
         
         // CONSTRUCTORS
         node(); // Construct a solved puzzle by default
@@ -29,17 +32,11 @@ class node {
         bool isEmptyPuzzle(); // Check if puzzle is emptyPuzzle
         void setRowCol(); // Find the position (row, col) of 0 in the puzzle
 
-        // OPERATORS, return emptyPuzzle if move is invalid
-        vector<vector<int>> up();
-        vector<vector<int>> down();
-        vector<vector<int>> left();
-        vector<vector<int>> right();
-
         // ACCESSORS
-        vector<vector<int>> getPuzzle();
-        int getDepth();
-        int getMisplaced();
-        int getFn();
-        int getRow();
-        int getCol();
+        vector<vector<int>> getPuzzle() const;
+        int getDepth() const;
+        int getMisplaced() const;
+        int getFn() const;
+        int getRow() const;
+        int getCol() const;
 };

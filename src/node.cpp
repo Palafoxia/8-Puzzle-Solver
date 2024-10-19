@@ -62,8 +62,8 @@ int node::manhattanDistance() {
     //For each tile in puzzle
     for (int i = 0; i < 3; i++) {
    		for (int j = 0; j < 3; j++) {
-		    if (puzzle[i][j] != 0) { //Don't calculate distance for the blank
-   				//Compare to each tile in reference
+		    if (puzzle[i][j] != 0) { //Don't calculate distance for the empty tile
+   				//Compare to each tile in solved state
     			for (int k = 0; k < 3; k++) {
    					for (int l = 0; l < 3; l++) {
 					    //Once found, add distance to total
@@ -107,59 +107,10 @@ bool node::isEmptyPuzzle() {
 	}
 }
 
-// OPERATORS (MOVE EMPTY TILE)
-// UP
-vector<vector<int>> node::up() {
-	vector<vector<int>> newPuzzle = puzzle;
-	if (row > 0) {
-		newPuzzle[row][col] = newPuzzle[row - 1][col];
-		newPuzzle[row - 1][col] = 0;
-	} else {
-		return emptyPuzzle;
-	}
-	return newPuzzle;
-}
-
-// DOWN
-vector<vector<int>> node::down() {
-	vector<vector<int>> newPuzzle = puzzle;
-	if (row < int(newPuzzle.size()) - 1) {
-		newPuzzle[row][col] = newPuzzle[row + 1][col];
-		newPuzzle[row + 1][col] = 0;
-	} else {
-		return emptyPuzzle;
-	}
-	return newPuzzle;
-}
-
-// LEFT
-vector<vector<int>> node::left() {
-	vector<vector<int>> newPuzzle = puzzle;
-	if (col > 0) {
-		newPuzzle[row][col] = newPuzzle[row][col - 1];
-		newPuzzle[row][col - 1] = 0;
-	} else {
-		return emptyPuzzle;
-	}
-	return newPuzzle;
-}
-
-// RIGHT
-vector<vector<int>> node::right() {
-	vector<vector<int>> newPuzzle = puzzle;
-	if (col < int(newPuzzle[0].size()) - 1) {
-		newPuzzle[row][col] = newPuzzle[row][col + 1];
-		newPuzzle[row][col + 1] = 0;
-	} else {
-		return emptyPuzzle;
-	}
-	return newPuzzle;
-}
-
 // ACCESSORS
-vector<vector<int>> node::getPuzzle() {return puzzle;}
-int node::getDepth() {return depth;}
-int node::getMisplaced() {return misplaced;}
-int node::getFn() {return fn;}
-int node::getRow() {return row;}
-int node::getCol() {return col;}
+vector<vector<int>> node::getPuzzle() const {return puzzle;}
+int node::getDepth() const {return depth;}
+int node::getMisplaced() const {return misplaced;}
+int node::getFn() const {return fn;}
+int node::getRow() const {return row;}
+int node::getCol() const {return col;}
